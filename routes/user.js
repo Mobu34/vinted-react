@@ -7,12 +7,6 @@ const cloudinary = require("cloudinary").v2;
 
 const User = require("../models/User");
 
-cloudinary.config({
-  cloud_name: "dt2v2biq4",
-  api_key: "963554912823413",
-  api_secret: "aGqxEfOEn8SbpMQy7SV5r11imEc",
-});
-
 router.post("/user/signup", async (req, res) => {
   const { email, username, phone, password } = req.fields;
   const picture = req.files.picture.path;
