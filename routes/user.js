@@ -9,7 +9,6 @@ const User = require("../models/User");
 
 router.post("/user/signup", async (req, res) => {
   const { email, username, phone, password } = req.fields;
-  const picture = req.files.picture.path;
 
   try {
     const checkEmail = await User.findOne({ email });
@@ -20,16 +19,22 @@ router.post("/user/signup", async (req, res) => {
       const hash = SHA256(password + salt).toString(encBase);
       const token = uid2(16);
 
-      const photoCloudinary = await cloudinary.uploader.upload(picture, {
-        folder: "/vinted/picture",
-      });
+      let photoCloudinary;
+      if (req.files.picture) {
+        photoCloudinary = await cloudinary.uploader.upload(
+          req.files.picture.path,
+          {
+            folder: "/vinted/picture",
+          }
+        );
+      }
 
       const newUser = new User({
         email,
         account: {
           username,
           phone,
-          avatar: photoCloudinary,
+          avatar: photoCloudinary ? photoCloudinary : null,
         },
         token,
         hash,
