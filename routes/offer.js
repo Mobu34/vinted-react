@@ -42,9 +42,9 @@ router.get("/offers", async (req, res) => {
       .select(
         "product_name product_details product_description product_price product_image.secure_url"
       )
-      .sort(sortByPrice)
-      .limit(limit)
-      .skip(skip);
+      .sort(sortByPrice);
+    // .limit(limit)
+    // .skip(skip);
 
     res.status(200).json({ count: count, offers: result });
   } catch (err) {
@@ -143,7 +143,7 @@ router.delete("/offer/delete", isAuthenticated, async (req, res) => {
   }
 });
 
-router.get("/offer", async (req, res) => {
+router.get("/offer/", async (req, res) => {
   const idOffer = req.query.id;
 
   try {
@@ -152,6 +152,7 @@ router.get("/offer", async (req, res) => {
       select: "account email",
     });
 
+    console.log(offer);
     res.status(200).json(offer);
   } catch (err) {
     res.status(400).json({ error: err.message });
