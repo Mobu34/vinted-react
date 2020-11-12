@@ -27,7 +27,7 @@ router.get("/offers", async (req, res) => {
     }
 
     let skip = 0;
-    const limit = 2;
+    const limit = 5;
     if (page > 1) {
       skip = page * limit - limit;
     }
@@ -42,9 +42,9 @@ router.get("/offers", async (req, res) => {
       .select(
         "product_name product_details product_description product_price product_image.secure_url"
       )
-      .sort(sortByPrice);
-    // .limit(limit)
-    // .skip(skip);
+      .sort(sortByPrice)
+      .limit(limit)
+      .skip(skip);
 
     res.status(200).json({ count: count, offers: result });
   } catch (err) {

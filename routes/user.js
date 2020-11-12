@@ -81,12 +81,12 @@ router.post("/user/login", async (req, res) => {
       const checkHash = SHA256(password + user.salt).toString(encBase);
 
       if (checkHash === user.hash) {
-        res.status(200).json({ message: "User successfully logged" });
+        res.status(200).json(user.token);
       } else {
         res.status(400).json({ error: "Wrong password" });
       }
     } else {
-      res.status(200).json({ error: "Incorrect username or email" });
+      res.status(401).json({ error: "Incorrect username or email" });
     }
   } catch (err) {
     res.status(400).json({ error: err.message });
