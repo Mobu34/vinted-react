@@ -18,7 +18,7 @@ router.post("/picture", async (req, res) => {
 
     await newPicture.save();
 
-    res.status(200).json(picture);
+    res.status(200).json(newPicture);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
