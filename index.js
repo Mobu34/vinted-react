@@ -25,6 +25,8 @@ const userRoutes = require("./routes/user");
 app.use(userRoutes);
 const offerRoutes = require("./routes/offer");
 app.use(offerRoutes);
+const pictureRoutes = require("./routes/picture");
+app.use(pictureRoutes);
 
 app.all("*", (req, res) => {
   res.status(404).json({ error: "Page not found" });
