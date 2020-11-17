@@ -107,21 +107,19 @@ router.post("/offer/publish", isAuthenticated, async (req, res) => {
   }
 });
 
-router.post("/offer/payment", isAuthenticated, async (req, res) => {
+router.post("/offer/payment", async (req, res) => {
   try {
     // réception du token créer via l'API Stripe depuis le front
     const { stripeToken, amount, description, id } = req.fields;
-    console.log("test");
+
     const response = await stripe.charges.create({
       amount: amount * 100,
       currency: "eur",
       description,
       source: stripeToken,
     });
-    console.log(response);
 
     const deleteOffer = await Offer.findById(id);
-    console.log(deleteOffer);
     await deleteOffer.deleteOne();
 
     res.status(200).json(response);
@@ -146,7 +144,6 @@ router.put("/offer/update", isAuthenticated, async (req, res) => {
 
     res.status(200).json(offer);
   } catch (err) {
-    console.log("CATCH");
     res.status(400).json({ error: err.message });
   }
 });
@@ -176,7 +173,6 @@ router.get("/offer/", async (req, res) => {
       select: "account email",
     });
 
-    console.log(offer);
     res.status(200).json(offer);
   } catch (err) {
     res.status(400).json({ error: err.message });
