@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const cloudinary = require("cloudinary").v2;
+const stripe = require("stripe")(process.env.STRIPE_SK_TEST);
 
 const Offer = require("../models/Offer");
 const User = require("../models/User");
@@ -101,6 +102,27 @@ router.post("/offer/publish", isAuthenticated, async (req, res) => {
 
       res.status(200).json(newOffer);
     }
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+router.post("./offer/payment", isAuthenticated, async (req, res) => {
+  try {
+    // réception du token créer via l'API Stripe depuis le front
+    const { stripeToken, amount, description, id } = req.fields;
+
+    const response = await stripe.charges.create({
+      amount: amount * 100,
+      currency: "eur",
+      description,
+      source: stripeToken,
+    });
+
+    const deleteOffer = await Offer.findById(id);
+    deleteOffer.deleteOne();
+
+    res.status(200).json(response);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
