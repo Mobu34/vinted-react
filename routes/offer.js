@@ -111,16 +111,18 @@ router.post("/offer/payment", isAuthenticated, async (req, res) => {
   try {
     // réception du token créer via l'API Stripe depuis le front
     const { stripeToken, amount, description, id } = req.fields;
-
+    console.log("test");
     const response = await stripe.charges.create({
       amount: amount * 100,
       currency: "eur",
       description,
       source: stripeToken,
     });
+    console.log(response);
 
     const deleteOffer = await Offer.findById(id);
-    deleteOffer.deleteOne();
+    console.log(deleteOffer);
+    await deleteOffer.deleteOne();
 
     res.status(200).json(response);
   } catch (err) {
