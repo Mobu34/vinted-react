@@ -107,7 +107,7 @@ router.post("/offer/publish", isAuthenticated, async (req, res) => {
   }
 });
 
-router.post("./offer/payment", isAuthenticated, async (req, res) => {
+router.post("/offer/payment", isAuthenticated, async (req, res) => {
   try {
     // réception du token créer via l'API Stripe depuis le front
     const { stripeToken, amount, description, id } = req.fields;
